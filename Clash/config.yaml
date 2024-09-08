@@ -1,0 +1,94 @@
+port: 7890
+socks-port: 7891
+allow-lan: false
+mode: Rule
+log-level: info
+external-controller: 127.0.0.1:9090
+secret: ""
+
+# 订阅地址的 Proxy Provider 部分
+proxy-providers:
+  provider1:
+    type: http
+    url: https://x.nsa.cc/api/v1/client/subscribe?token=888fa1629a70b5492ba21d17b1f14177
+    interval: 3600
+    path: ./providers/provider1.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+  provider2:
+    type: http
+    url: https://wvw.guanxi.cloudns.be/api/v1/client/subscribe/token=9e48312624d64c219f8e7u9af55b4k238bh7
+    interval: 3600
+    path: ./providers/provider2.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+  provider3:
+    type: http
+    url: https://1.bethebest.eu.org/api/v1/client/subscribe?token=3715a07dc448ad9f275aa73e54b762b7
+    interval: 3600
+    path: ./providers/provider3.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+  provider4:
+    type: http
+    url: https://mlshu.com/api/v1/client/subscribe?token=4cabd6f21f4ae9dda02f1be1753f0fdb
+    interval: 3600
+    path: ./providers/provider4.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+  provider5:
+    type: http
+    url: https://board.nsde.date/api/v1/client/subscribe?token=84e28dd2b42173a927d7e39896350cdd
+    interval: 3600
+    path: ./providers/provider5.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+  provider6:
+    type: http
+    url: https://j2s.buzz/v3/subscr?id=939901fa08cf42e7b027966bfebce3b5
+    interval: 3600
+    path: ./providers/provider6.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+
+# 代理组部分
+proxy-groups:
+  - name: "Auto"
+    type: url-test
+    proxies:
+      - provider1
+      - provider2
+      - provider3
+      - provider4
+      - provider5
+      - provider6
+    url: http://www.google.com/generate_204
+    interval: 300
+
+  - name: "Select"
+    type: select
+    proxies:
+      - Auto
+      - provider1
+      - provider2
+      - provider3
+      - provider4
+      - provider5
+      - provider6
+
+# 规则部分
+rules:
+  - GEOIP,CN,DIRECT
+  - MATCH,Select
