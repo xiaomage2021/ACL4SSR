@@ -1,133 +1,103 @@
+port: 7890  # HTTP 代理端口，Clash 将监听此端口，用于普通代理流量
+socks-port: 7891  # SOCKS5 代理端口，Clash 将监听此端口，用于 SOCKS5 代理流量
+redir-port: 7892  # 重定向端口，主要用于透明代理
+allow-lan: true  # 是否允许局域网设备连接，`true` 允许其他设备通过 LAN 连接到该代理
+mode: Rule  # 代理模式，这里是根据规则进行代理，其他模式有 `Global`（全局）和 `Direct`（直连）
+log-level: info  # 日志记录的详细程度，`info` 提供中等详细信息，可以设置为 `debug`（更详细）或 `silent`（无日志）
+external-controller: 127.0.0.1:9090  # Clash 控制端口，用于通过 API 进行远程控制，默认本地回环
+secret: ""  # 控制接口的 API 密码，留空表示不需要密码
 
-port: 7890
-socks-port: 7891
-allow-lan: false
-mode: Rule
-log-level: info
-external-controller: 127.0.0.1:9090
-secret: ""
-
+# 订阅服务部分，可设置多个代理订阅源
 proxy-providers:
+  # 聚合机场订阅链接
   白嫖机场:
-    type: http
-    url: https://x.nsa.cc/api/v1/client/subscribe?token=888fa1629a70b5492ba21d17b1f14177
-    interval: 86400  # 每24小时自动更新订阅
-    path: ./baipiao.yaml
-    health-check:
-      enable: true
-      interval: 600
-      url: http://www.google.com/generate_204
+    type: http  # 订阅类型，使用 HTTP 请求订阅
+    url: https://x.nsa.cc/api/v1/client/subscribe?token=888fa1629a70b5492ba21d17b1f14177  # 订阅地址
+    interval: 86400  # 自动更新的时间间隔，单位为秒，86400 秒为 24 小时
+    path: ./baipiao_jichang.yaml  # 保存订阅结果的路径
+    health-check:  # 健康检查设置，用于自动检测代理节点的可用性
+      enable: true  # 是否启用健康检查，`true` 表示启用
+      interval: 600  # 检查间隔时间，单位为秒，这里是每 10 分钟检测一次
+      url: http://www.gstatic.com/generate_204  # 健康检查时访问的 URL
+      status: 200  # 检查成功的 HTTP 状态码，200 表示正常
 
   节点管理系统:
     type: http
     url: https://wvw.guanxi.cloudns.be/api/v1/client/subscribe/token=9e48312624d64c219f8e7u9af55b4k238bh7
-    interval: 86400  # 每24小时自动更新订阅
-    path: ./guanxi.yaml
+    interval: 86400
+    path: ./jiedian_guanli_xitong.yaml
     health-check:
       enable: true
       interval: 600
-      url: http://www.google.com/generate_204
-
-  嘎嘎机场:
-    type: http
-    url: https://1.bethebest.eu.org/api/v1/client/subscribe?token=3715a07dc448ad9f275aa73e54b762b7
-    interval: 86400  # 每24小时自动更新订阅
-    path: ./gaga.yaml
-    health-check:
-      enable: true
-      interval: 600
-      url: http://www.google.com/generate_204
-
-  马铃薯机场:
-    type: http
-    url: https://mlshu.com/api/v1/client/subscribe?token=4cabd6f21f4ae9dda02f1be1753f0fdb
-    interval: 86400  # 每24小时自动更新订阅
-    path: ./malingshu.yaml
-    health-check:
-      enable: true
-      interval: 600
-      url: http://www.google.com/generate_204
-
-  年前机场:
-    type: http
-    url: https://board.nsde.date/api/v1/client/subscribe?token=84e28dd2b42173a927d7e39896350cdd
-    interval: 86400  # 每24小时自动更新订阅
-    path: ./nianqian.yaml
-    health-check:
-      enable: true
-      interval: 600
-      url: http://www.google.com/generate_204
+      url: http://www.gstatic.com/generate_204
+      status: 200
 
   三分机场:
     type: http
     url: http://59.80.54.192:10601/api/v1/client/subscribe?token=dca03805d3639f55ce00df0858c6cee5&flag=clash
-    interval: 86400  # 每24小时自动更新订阅
-    path: ./sanfen.yaml
+    interval: 86400
+    path: ./sanfen_jichang.yaml
     health-check:
       enable: true
       interval: 600
-      url: http://www.google.com/generate_204
+      url: http://www.gstatic.com/generate_204
+      status: 200
 
+# 策略组，决定如何选择代理节点
 proxy-groups:
-  - name: "节点选择"
-    type: select
-    proxies:
-      - 自动选择
-      - 手动切换
-      - 负载均衡
-      - 故障转移
-      - 白嫖机场
+  # 节点选择组，允许用户选择自动选择、手动切换、负载均衡或故障转移等方式来选择代理
+  - name: "节点选择"  # 策略组名称，在用户界面中显示为 "节点选择"
+    type: select  # 选择类型，这里是手动选择
+    proxies:  # 可用的策略列表
+      - 自动选择  # 自动选择最佳节点
+      - 手动切换  # 用户手动选择节点
+      - 负载均衡  # 使用负载均衡选择节点
+      - 故障转移  # 当一个节点故障时自动切换
+      - 白嫖机场  # 机场名称
       - 节点管理系统
-      - 嘎嘎机场
-      - 马铃薯机场
-      - 年前机场
       - 三分机场
 
+  # 自动选择代理组，根据速度测试结果自动选择最优节点
   - name: "自动选择"
-    type: url-test
+    type: url-test  # 根据测试 URL 的延迟来自动选择最优代理
     use:
-      - 白嫖机场
+      - 白嫖机场  # 机场代理节点
       - 节点管理系统
-      - 嘎嘎机场
-      - 马铃薯机场
-      - 年前机场
       - 三分机场
-    url: http://www.google.com/generate_204
-    interval: 300
+    url: http://www.gstatic.com/generate_204  # 用于测试延迟的 URL
+    interval: 300  # 测试间隔时间，单位为秒，每 5 分钟测试一次
 
+  # 手动切换代理组，用户可以在这些机场中手动选择
   - name: "手动切换"
-    type: select
+    type: select  # 手动选择代理节点
     use:
       - 白嫖机场
       - 节点管理系统
-      - 嘎嘎机场
-      - 马铃薯机场
-      - 年前机场
       - 三分机场
 
+  # 负载均衡代理组，将流量分配到不同的代理节点以平衡负载
   - name: "负载均衡"
-    type: load-balance
+    type: load-balance  # 负载均衡，自动选择流量最少的节点
     use:
       - 白嫖机场
       - 节点管理系统
-      - 嘎嘎机场
-      - 马铃薯机场
-      - 年前机场
       - 三分机场
+    url: http://www.gstatic.com/generate_204
+    interval: 300  # 每 5 分钟检查一次负载
 
+  # 故障转移代理组，当当前节点失效时，自动切换到下一个可用节点
   - name: "故障转移"
-    type: fallback
+    type: fallback  # 故障转移，自动切换到可用节点
     use:
       - 白嫖机场
       - 节点管理系统
-      - 嘎嘎机场
-      - 马铃薯机场
-      - 年前机场
       - 三分机场
+    url: http://www.gstatic.com/generate_204  # 用于测试的 URL
+    interval: 300  # 每 5 分钟检查节点状态
 
-  # 为每个机场单独创建一个策略组
+  # 为每个机场单独创建一个策略组，用户可以手动选择特定机场的节点
   - name: "白嫖机场"
-    type: select
+    type: select  # 手动选择机场节点
     use:
       - 白嫖机场
 
@@ -136,67 +106,51 @@ proxy-groups:
     use:
       - 节点管理系统
 
-  - name: "嘎嘎机场"
-    type: select
-    use:
-      - 嘎嘎机场
-
-  - name: "马铃薯机场"
-    type: select
-    use:
-      - 马铃薯机场
-
-  - name: "年前机场"
-    type: select
-    use:
-      - 年前机场
-
   - name: "三分机场"
     type: select
     use:
       - 三分机场
 
+# 规则部分，用于指定不同域名或关键字使用的代理策略
 rules:
-  # 常用服务
-  - DOMAIN-SUFFIX,google.com,自动选择
-  - DOMAIN-SUFFIX,youtube.com,自动选择
-  - DOMAIN-SUFFIX,facebook.com,自动选择
-  - DOMAIN-SUFFIX,twitter.com,自动选择
-  - DOMAIN-SUFFIX,instagram.com,自动选择
-  - DOMAIN-SUFFIX,whatsapp.com,自动选择
-  - DOMAIN-SUFFIX,netflix.com,自动选择
-  - DOMAIN-SUFFIX,spotify.com,自动选择
-  - DOMAIN-SUFFIX,github.com,自动选择
-  - DOMAIN-SUFFIX,wikipedia.org,自动选择
+  # 针对 Telegram 的规则，使用代理
+  - DOMAIN-SUFFIX,telegram.org,节点选择  # 所有以 telegram.org 结尾的域名走代理
+  - DOMAIN-KEYWORD,telegram,节点选择  # 任何 URL 中包含“telegram”的关键字，均通过代理
 
-  # Telegram 相关
-  - DOMAIN-SUFFIX,telegram.org,自动选择
-  - DOMAIN-SUFFIX,t.me,自动选择
-  - DOMAIN-SUFFIX,telegraph.com,自动选择
-  - DOMAIN-SUFFIX,telegra.ph,自动选择
+  # 针对 Google 的规则，使用代理
+  - DOMAIN-SUFFIX,google.com,节点选择  # 所有以 google.com 结尾的域名走代理
+  - DOMAIN-SUFFIX,google.co.jp,节点选择  # 所有以 google.co.jp 结尾的域名走代理
+  - DOMAIN-SUFFIX,gmail.com,节点选择  # 所有以 gmail.com 结尾的域名走代理
+  - DOMAIN-KEYWORD,google,节点选择  # 任何 URL 中包含“google”的关键字，均通过代理
 
-  # 其他常用服务
-  - DOMAIN-SUFFIX,zoom.us,自动选择
-  - DOMAIN-SUFFIX,slack.com,自动选择
-  - DOMAIN-SUFFIX,discord.com,自动选择
-  - DOMAIN-SUFFIX,twitch.tv,自动选择
-  - DOMAIN-SUFFIX,reddit.com,自动选择
+  # 针对 Facebook 的规则，使用代理
+  - DOMAIN-SUFFIX,facebook.com,节点选择  # 所有以 facebook.com 结尾的域名走代理
+  - DOMAIN-SUFFIX,fbcdn.net,节点选择  # 所有以 fbcdn.net 结尾的域名走代理（Facebook CDN）
 
-  # 国内应用直连
-  - DOMAIN-SUFFIX,baidu.com,DIRECT
-  - DOMAIN-SUFFIX,qq.com,DIRECT
-  - DOMAIN-SUFFIX,taobao.com,DIRECT
-  - DOMAIN-SUFFIX,weibo.com,DIRECT
-  - DOMAIN-SUFFIX,wechat.com,DIRECT
-  - DOMAIN-SUFFIX,alipay.com,DIRECT
+  # 针对 Twitter 的规则，使用代理
+  - DOMAIN-SUFFIX,twitter.com,节点选择  # 所有以 twitter.com 结尾的域名走代理
+  - DOMAIN-SUFFIX,t.co,节点选择  # 所有以 t.co 结尾的域名走代理（Twitter 缩短链接服务）
+
+  # 针对 YouTube 的规则，使用代理
+  - DOMAIN-SUFFIX,youtube.com,节点选择  # 所有以 youtube.com 结尾的域名走代理
+  - DOMAIN-SUFFIX,ytimg.com,节点选择  # 所有以 ytimg.com 结尾的域名走代理（YouTube 静态资源）
+
+  # 针对 Netflix 的规则，使用代理
+  - DOMAIN-SUFFIX,netflix.com,节点选择  # 所有以 netflix.com 结尾的域名走代理
+
+  # 针对 Instagram 的规则，使用代理
+  - DOMAIN-SUFFIX,instagram.com,节点选择  # 所有以 instagram.com 结尾的域名走代理
+  - DOMAIN-SUFFIX,cdninstagram.com,节点选择  # 所有以 cdninstagram.com 结尾的域名走代理（Instagram CDN）
 
   # 广告屏蔽
   - DOMAIN-SUFFIX,adservice.google.com,REJECT
-  - DOMAIN-SUFFIX,doubleclick.net,REJECT
+  - DOMAIN-SUFFIX,googleadservices.com,REJECT
   - DOMAIN-SUFFIX,googlesyndication.com,REJECT
-  - DOMAIN-SUFFIX,google-analytics.com,REJECT
+  - DOMAIN-SUFFIX,ads.google.com,REJECT
 
-  # 默认规则
-  - GEOIP,CN,DIRECT
-  - MATCH,自动选择
-    
+  # 国内网站直连
+  - DOMAIN-SUFFIX,cn,DIRECT  # 所有以 .cn 结尾的域名直接访问
+  - GEOIP,CN,DIRECT  # 中国大陆 IP 地址直接访问
+
+  # 其他规则
+  - MATCH,节点选择  # 默认规则，匹配所有未指定规则的流量，使用“自动选择”策略
