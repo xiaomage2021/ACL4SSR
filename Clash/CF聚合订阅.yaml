@@ -140,7 +140,6 @@ proxy-groups:
   - name: "自动选择"
     type: url-test
     use:
-      - 69云
       - 小马订阅④
       - 小马订阅⑤
       - CM大佬Trojan订阅
@@ -157,7 +156,6 @@ proxy-groups:
   - name: "手动切换"
     type: select
     use:
-      - 69云
       - 小马订阅④
       - 小马订阅⑤
       - CM大佬Trojan订阅
@@ -172,7 +170,6 @@ proxy-groups:
   - name: "负载均衡"
     type: load-balance
     use:
-      - 69云
       - 小马订阅④
       - 小马订阅⑤
       - CM大佬Trojan订阅
@@ -187,7 +184,6 @@ proxy-groups:
   - name: "故障转移"
     type: fallback
     use:
-      - 69云
       - 小马订阅④
       - 小马订阅⑤
       - CM大佬Trojan订阅
@@ -295,6 +291,9 @@ rules:
   - DOMAIN-SUFFIX,googlesyndication.com,REJECT
   - DOMAIN-SUFFIX,google-analytics.com,REJECT
 
+  # 国内网站直连
+  - DOMAIN-SUFFIX,cn,DIRECT  # 所有以 .cn 结尾的域名直接访问
+  - GEOIP,CN,DIRECT  # 中国大陆 IP 地址直接访问  
+
   # 默认规则
-  - GEOIP,CN,DIRECT
   - MATCH,节点选择
