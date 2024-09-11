@@ -79,6 +79,7 @@ proxy-groups:
       - 白嫖机场②
       - 三分机场
 
+  # 为每个机场单独创建一个策略组
   - name: "🆓 白嫖机场①"
     type: select
     use:
@@ -94,6 +95,7 @@ proxy-groups:
     use:
       - 三分机场
 
+  # 为规则集创建一个策略组
   - name: "🎥 奈飞视频"
     type: select
     proxies:
@@ -104,12 +106,58 @@ proxy-groups:
     proxies:
       - 🚀 节点选择
 
+  - name: "📹 油管视频"
+    type: select
+    proxies:
+      - 🚀 节点选择
+
+  - name: "📢 谷歌FCM"
+    type: select
+    proxies:
+      - 🚀 节点选择
+
+  - name: "🍃 应用净化"
+    type: select
+    proxies:
+      - REJECT
+      - DIRECT
+
+  - name: "Ⓜ️ 微软服务"
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 节点选择
+
+  - name: "🍎 苹果服务"
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 节点选择
+
+  - name: "🤖 OpenAI"
+    type: select
+    proxies:
+      - 🚀 节点选择
+
+  - name: "🌍 国外媒体"
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 节点选择
+
 rule-providers:
   ChinaDomain:
     type: http
     behavior: classical
     path: ./ruleset/ChinaDomain.yaml
     url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list
+    interval: 86400
+
+  UnBan:
+    type: http
+    behavior: classical
+    path: ./ruleset/UnBan.yaml
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/UnBan.list
     interval: 86400
 
   BanAD:
@@ -119,25 +167,105 @@ rule-providers:
     url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list
     interval: 86400
 
-  Netflix:
+  BanProgramAD:
     type: http
     behavior: classical
-    path: ./ruleset/Netflix.yaml
-    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Netflix.list
+    path: ./ruleset/BanProgramAD.yaml
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanProgramAD.list
     interval: 86400
 
-  Telegram:
+  Adobe:
     type: http
     behavior: classical
-    path: ./ruleset/Telegram.yaml
-    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Telegram.list
+    path: ./ruleset/Adobe.yaml
+    url: https://raw.githubusercontent.com/cmliu/ACL4SSR/main/Clash/adobe.list
+    interval: 86400
+
+  GoogleFCM:
+    type: http
+    behavior: classical
+    path: ./ruleset/GoogleFCM.yaml
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/GoogleFCM.list
+    interval: 86400
+
+  GoogleCN:
+    type: http
+    behavior: classical
+    path: ./ruleset/GoogleCN.yaml
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/GoogleCN.list
+    interval: 86400
+
+  SteamCN:
+    type: http
+    behavior: classical
+    path: ./ruleset/SteamCN.yaml
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/SteamCN.list
+    interval: 86400
+
+  Microsoft:
+    type: http
+    behavior: classical
+    path: ./ruleset/Microsoft.yaml
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Microsoft.list
+    interval: 86400
+
+  Apple:
+    type: http
+    behavior: classical
+    path: ./ruleset/Apple.yaml
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Apple.list
+    interval: 86400
+
+  OpenAi:
+    type: http
+    behavior: classical
+    path: ./ruleset/OpenAi.yaml
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/OpenAi.list
+    interval: 86400
+
+  YouTube:
+    type: http
+    behavior: classical
+    path: ./ruleset/YouTube.yaml
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/YouTube.list
+    interval: 86400
+
+  ProxyMedia:
+    type: http
+    behavior: classical
+    path: ./ruleset/ProxyMedia.yaml
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyMedia.list
+    interval: 86400
+
+  ProxyLite:
+    type: http
+    behavior: classical
+    path: ./ruleset/ProxyLite.yaml
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyLite.list
+    interval: 86400
+
+  LocalAreaNetwork:
+    type: http
+    behavior: classical
+    path: ./ruleset/LocalAreaNetwork.yaml
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list
     interval: 86400
 
 rules:
   - RULE-SET,ChinaDomain,DIRECT
+  - RULE-SET,LocalAreaNetwork,DIRECT
+  - RULE-SET,UnBan,DIRECT
   - RULE-SET,BanAD,REJECT
-  - RULE-SET,Netflix,🎥 奈飞视频
-  - RULE-SET,Telegram,📲 电报信息
+  - RULE-SET,BanProgramAD,🍃 应用净化
+  - RULE-SET,Adobe,🍃 应用净化
+  - RULE-SET,GoogleFCM,📢 谷歌FCM
+  - RULE-SET,GoogleCN,DIRECT
+  - RULE-SET,SteamCN,DIRECT
+  - RULE-SET,Microsoft,Ⓜ️ 微软服务
+  - RULE-SET,Apple,🍎 苹果服务
+  - RULE-SET,OpenAi,🤖 OpenAI
+  - RULE-SET,YouTube,📹 油管视频
+  - RULE-SET,ProxyMedia,🌍 国外媒体
   - GEOIP,LAN,DIRECT
   - GEOIP,CN,DIRECT
   - MATCH,🚀 节点选择
