@@ -1,0 +1,262 @@
+port: 7890
+socks-port: 7891
+allow-lan: false
+mode: Rule
+log-level: info
+external-controller: 127.0.0.1:9090
+secret: ""
+
+proxy-providers:
+  白嫖机场①:
+    type: http
+    url: https://x.nsa.cc/api/v1/client/subscribe?token=888fa1629a70b5492ba21d17b1f14177
+    interval: 86400
+    path: ./baipiao.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+
+  白嫖机场②:
+    type: http
+    url: https://wvw.guanxi.cloudns.be/api/v1/client/subscribe/token=9e48312624d64c219f8e7u9af55b4k238bh7
+    interval: 86400
+    path: ./guanxi.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+
+  三分机场:
+    type: http
+    url: http://59.80.54.192:10601/api/v1/client/subscribe?token=dca03805d3639f55ce00df0858c6cee5&flag=clash
+    interval: 86400
+    path: ./sanfen.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+
+proxy-groups:
+  - name: "🚀 节点选择"
+    type: select
+    proxies:
+      - 🌐 自动选择
+      - 👋 手动切换
+      - ⚖️ 负载均衡
+      - 🚨 故障转移
+      - 🆓 白嫖机场①
+      - 📋 白嫖机场②
+      - 🎯 三分机场
+
+  - name: "🌐 自动选择"
+    type: url-test
+    use:
+      - 白嫖机场①
+      - 白嫖机场②
+      - 三分机场
+    url: http://www.google.com/generate_204
+    interval: 300
+
+  - name: "👋 手动切换"
+    type: select
+    use:
+      - 白嫖机场①
+      - 白嫖机场②
+      - 三分机场
+
+  - name: "⚖️ 负载均衡"
+    type: load-balance
+    use:
+      - 白嫖机场①
+      - 白嫖机场②
+      - 三分机场
+
+  - name: "🚨 故障转移"
+    type: fallback
+    use:
+      - 白嫖机场①
+      - 白嫖机场②
+      - 三分机场
+
+  # 为每个机场单独创建一个策略组
+  - name: "🆓 白嫖机场①"
+    type: select
+    use:
+      - 白嫖机场①
+
+  - name: "📋 白嫖机场②"
+    type: select
+    use:
+      - 白嫖机场②
+
+  - name: "🎯 三分机场"
+    type: select
+    use:
+      - 三分机场
+
+rule-providers:
+  lan:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list"
+    path: ./rules/lan.yaml
+    interval: 86400
+
+  unban:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/UnBan.list"
+    path: ./rules/unban.yaml
+    interval: 86400
+
+  banad:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list"
+    path: ./rules/banad.yaml
+    interval: 86400
+
+  banprogramad:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanProgramAD.list"
+    path: ./rules/banprogramad.yaml
+    interval: 86400
+
+  adobe:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/cmliu/ACL4SSR/main/Clash/adobe.list"
+    path: ./rules/adobe.yaml
+    interval: 86400
+
+  googlefcm:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/GoogleFCM.list"
+    path: ./rules/googlefcm.yaml
+    interval: 86400
+
+  googlecn:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/GoogleCN.list"
+    path: ./rules/googlecn.yaml
+    interval: 86400
+
+  steamcn:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/SteamCN.list"
+    path: ./rules/steamcn.yaml
+    interval: 86400
+
+  microsoft:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Microsoft.list"
+    path: ./rules/microsoft.yaml
+    interval: 86400
+
+  apple:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Apple.list"
+    path: ./rules/apple.yaml
+    interval: 86400
+
+  telegram:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Telegram.list"
+    path: ./rules/telegram.yaml
+    interval: 86400
+
+  openai:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/OpenAi.list"
+    path: ./rules/openai.yaml
+    interval: 86400
+
+  shellopenai:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/juewuy/ShellClash/master/rules/ai.list"
+    path: ./rules/shellopenai.yaml
+    interval: 86400
+
+  youtube:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/YouTube.list"
+    path: ./rules/youtube.yaml
+    interval: 86400
+
+  netflix:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Netflix.list"
+    path: ./rules/netflix.yaml
+    interval: 86400
+
+  media:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyMedia.list"
+    path: ./rules/media.yaml
+    interval: 86400
+
+  proxylite:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyLite.list"
+    path: ./rules/proxylite.yaml
+    interval: 86400
+
+  cmblog:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/cmliu/ACL4SSR/main/Clash/CMBlog.list"
+    path: ./rules/cmblog.yaml
+    interval: 86400
+
+  chinadomain:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list"
+    path: ./rules/chinadomain.yaml
+    interval: 86400
+
+  chinacompanyip:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaCompanyIp.list"
+    path: ./rules/chinacompanyip.yaml
+    interval: 86400
+
+rules:
+  - RULE-SET,lan,DIRECT
+  - RULE-SET,unban,DIRECT
+  - RULE-SET,banad,REJECT
+  - RULE-SET,banprogramad,REJECT
+  - RULE-SET,adobe,REJECT
+  - RULE-SET,googlefcm,DIRECT
+  - RULE-SET,googlecn,DIRECT
+  - RULE-SET,steamcn,DIRECT
+  - RULE-SET,microsoft,DIRECT
+  - RULE-SET,apple,DIRECT
+  - RULE-SET,telegram,🚀 节点选择
+  - RULE-SET,openai,🚀 节点选择
+  - RULE-SET,shellopenai,🚀 节点选择
+  - RULE-SET,youtube,🚀 节点选择
+  - RULE-SET,netflix,🚀 节点选择
+  - RULE-SET,media,🚀 节点选择
+  - RULE-SET,proxylite,🚀 节点选择
+  - RULE-SET,cmblog,🚀 节点选择
+  - RULE-SET,chinadomain,DIRECT
+  - RULE-SET,chinacompanyip,DIRECT
+  - GEOIP,LAN,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,🚀 节点选择
