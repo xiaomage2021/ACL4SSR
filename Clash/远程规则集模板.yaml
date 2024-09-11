@@ -252,6 +252,7 @@ rule-providers:
     interval: 86400
 
 rules:
+  # 远程规则集
   - RULE-SET,ChinaDomain,DIRECT
   - RULE-SET,LocalAreaNetwork,DIRECT
   - RULE-SET,UnBan,DIRECT
@@ -266,6 +267,11 @@ rules:
   - RULE-SET,OpenAi,🤖 OpenAI
   - RULE-SET,YouTube,📹 油管视频
   - RULE-SET,ProxyMedia,🌍 国外媒体
+
+  # 漏网之鱼
+  - DOMAIN-SUFFIX,githubusercontent.com,🚀 节点选择
+
+  # 默认规则
   - GEOIP,LAN,DIRECT
   - GEOIP,CN,DIRECT
   - MATCH,🚀 节点选择
