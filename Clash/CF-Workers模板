@@ -31,7 +31,7 @@ proxy-providers:
     type: http
     url: https://dy01.235mail.com/05c6ae0c-84f5-441e-909f-9d3e49bde9a7?clash
     interval: 86400
-    path: ./xiaomashudun4.yaml
+    path: ./xiaoma_01.yaml
     health-check:
       enable: true
       interval: 600
@@ -41,7 +41,7 @@ proxy-providers:
     type: http
     url: https://dy02.235mail.com/dy?clash
     interval: 86400
-    path: ./xiaomashudun5.yaml
+    path: ./xiaoma_02.yaml
     health-check:
       enable: true
       interval: 600
@@ -293,6 +293,9 @@ rules:
   - DOMAIN-SUFFIX,api.openai.com,🐾 特殊服务
   - DOMAIN-SUFFIX,chat.openai.com,🐾 特殊服务
   - DOMAIN-SUFFIX,chatgpt.com,🐾 特殊服务
+
+  # 特殊网站分流 
+  - DOMAIN-SUFFIX,socialblade.com,🐾 特殊服务
 
   # 国内应用直连
   - DOMAIN-SUFFIX,weixin.qq.com,DIRECT  # 微信
