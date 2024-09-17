@@ -1,0 +1,333 @@
+addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request))
+})
+
+async function handleRequest(request) {
+  const url = new URL(request.url)
+
+  // 检查路径是否匹配 "/dy"
+  if (url.pathname === '/dy') {
+    const clashConfig = `
+port: 7890
+socks-port: 7891
+allow-lan: false
+mode: Rule
+log-level: info
+external-controller: 127.0.0.1:9090
+secret: ""
+
+proxy-providers:
+  69云:
+    type: http
+    url: https://checkhere.top/link/v2ZUd10nJ0WjPJbp?clash=1
+    interval: 86400
+    path: ./69yun.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+
+  小马订阅①:
+    type: http
+    url: https://dy01.235mail.com/05c6ae0c-84f5-441e-909f-9d3e49bde9a7?clash
+    interval: 86400
+    path: ./xiaomashudun4.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+
+  小马订阅②:
+    type: http
+    url: https://dy02.235mail.com/dy?clash
+    interval: 86400
+    path: ./xiaomashudun5.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+
+  CM大佬Trojan订阅:
+    type: http
+    url: https://altrojan.filegear-sg.me/TCorg
+    interval: 86400
+    path: ./cmdlaotrojan.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+
+  CM大佬VLESS订阅:
+    type: http
+    url: https://alvless.comorg.us.kg/TCorg
+    interval: 86400
+    path: ./cmdlaovless.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+
+  天诚大佬VLESS订阅:
+    type: http
+    url: https://vless.fxxk.dedyn.io/auto
+    interval: 86400
+    path: ./tianchenglaovless.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+
+  King大佬订阅:
+    type: http
+    url: http://allsub.king361.cf
+    interval: 86400
+    path: ./kinglao.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+
+  OTC大佬订阅:
+    type: http
+    url: https://sub.kaiche.tk/?token=auto
+    interval: 86400
+    path: ./otclao.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+
+  3K大佬订阅:
+    type: http
+    url: https://3k.fxxk.dedyn.io/sub
+    interval: 86400
+    path: ./3klao.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+
+  MoistR大佬Trojan订阅:
+    type: http
+    url: https://moist.freenods.sbs/Trojan
+    interval: 86400
+    path: ./moistrtrojan.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+
+  MoistR大佬VLESS订阅:
+    type: http
+    url: https://moistr.freenods.sbs/mianfeicf
+    interval: 86400
+    path: ./moistrvless.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.google.com/generate_204
+
+proxy-groups:
+  - name: "🚀 节点选择"
+    type: select
+    proxies:
+      - 🌍 自动选择
+      - 🔧 手动切换
+      - 📊 负载均衡
+      - 🔄 故障转移
+      - 🛫 69云
+      - 🐎 小马订阅①
+      - 🦄 小马订阅②
+      - 🛡️ CM大佬Trojan订阅
+      - 🔑 CM大佬VLESS订阅
+      - 🦅 天诚大佬VLESS订阅
+      - 👑 King大佬订阅
+      - ⚡ OTC大佬订阅
+      - 🌠 3K大佬订阅
+      - 💦 MoistR大佬Trojan订阅
+      - 🌊 MoistR大佬VLESS订阅
+
+  - name: "🌍 自动选择"
+    type: url-test
+    url: http://www.google.com/generate_204
+    interval: 300
+    tolerance: 50
+    use:
+      - 小马订阅①
+      - 小马订阅②
+      - CM大佬Trojan订阅
+      - CM大佬VLESS订阅
+      - 天诚大佬VLESS订阅
+      - King大佬订阅
+      - OTC大佬订阅
+      - 3K大佬订阅
+      - MoistR大佬Trojan订阅
+      - MoistR大佬VLESS订阅
+
+  - name: "🔧 手动切换"
+    type: select
+    use:
+      - 小马订阅①
+      - 小马订阅②
+      - CM大佬Trojan订阅
+      - CM大佬VLESS订阅
+      - 天诚大佬VLESS订阅
+      - King大佬订阅
+      - OTC大佬订阅
+      - 3K大佬订阅
+      - MoistR大佬Trojan订阅
+      - MoistR大佬VLESS订阅
+
+  - name: "📊 负载均衡"
+    type: load-balance
+    use:
+      - 小马订阅①
+      - 小马订阅②
+      - CM大佬Trojan订阅
+      - CM大佬VLESS订阅
+      - 天诚大佬VLESS订阅
+      - King大佬订阅
+      - OTC大佬订阅
+      - 3K大佬订阅
+      - MoistR大佬Trojan订阅
+      - MoistR大佬VLESS订阅
+
+  - name: "🔄 故障转移"
+    type: fallback
+    use:
+      - 小马订阅①
+      - 小马订阅②
+      - CM大佬Trojan订阅
+      - CM大佬VLESS订阅
+      - 天诚大佬VLESS订阅
+      - King大佬订阅
+      - OTC大佬订阅
+      - 3K大佬订阅
+      - MoistR大佬Trojan订阅
+      - MoistR大佬VLESS订阅
+
+  - name: "🐾 特殊服务"
+    type: select
+    proxies:
+      - 🛫 69云
+      - 🐎 小马订阅①
+      - 🦄 小马订阅②
+
+  # 为每个机场单独创建一个策略组
+  - name: "🛫 69云"
+    type: fallback
+    use:
+      - 69云
+
+  - name: "🐎 小马订阅①"
+    type: fallback
+    use:
+      - 小马订阅①
+
+  - name: "🦄 小马订阅②"
+    type: fallback
+    use:
+      - 小马订阅②
+
+  - name: "🛡️ CM大佬Trojan订阅"
+    type: fallback
+    use:
+      - CM大佬Trojan订阅
+
+  - name: "🔑 CM大佬VLESS订阅"
+    type: fallback
+    use:
+      - CM大佬VLESS订阅
+
+  - name: "🦅 天诚大佬VLESS订阅"
+    type: fallback
+    use:
+      - 天诚大佬VLESS订阅
+
+  - name: "👑 King大佬订阅"
+    type: fallback
+    use:
+      - King大佬订阅
+
+  - name: "⚡ OTC大佬订阅"
+    type: fallback
+    use:
+      - OTC大佬订阅
+
+  - name: "🌠 3K大佬订阅"
+    type: fallback
+    use:
+      - 3K大佬订阅
+
+  - name: "💦 MoistR大佬Trojan订阅"
+    type: fallback
+    use:
+      - MoistR大佬Trojan订阅
+
+  - name: "🌊 MoistR大佬VLESS订阅"
+    type: fallback
+    use:
+      - MoistR大佬VLESS订阅
+
+rules:
+  # 常用服务
+  - DOMAIN-SUFFIX,google.com,🚀 节点选择
+  - DOMAIN-SUFFIX,youtube.com,🚀 节点选择
+  - DOMAIN-SUFFIX,facebook.com,🚀 节点选择
+  - DOMAIN-SUFFIX,twitter.com,🚀 节点选择
+  - DOMAIN-SUFFIX,instagram.com,🚀 节点选择
+  - DOMAIN-SUFFIX,whatsapp.com,🚀 节点选择
+  - DOMAIN-SUFFIX,netflix.com,🚀 节点选择
+  - DOMAIN-SUFFIX,spotify.com,🚀 节点选择
+  - DOMAIN-SUFFIX,github.com,🚀 节点选择
+  - DOMAIN-SUFFIX,wikipedia.org,🚀 节点选择
+
+  # Telegram 相关
+  - DOMAIN-SUFFIX,telegram.org,🚀 节点选择
+  - DOMAIN-SUFFIX,t.me,🚀 节点选择
+  - DOMAIN-SUFFIX,telegraph.com,🚀 节点选择
+  - DOMAIN-SUFFIX,telegra.ph,🚀 节点选择
+
+  # OpenAI 相关规则走特殊服务策略组
+  - DOMAIN-SUFFIX,openai.com,🐾 特殊服务
+  - DOMAIN-SUFFIX,api.openai.com,🐾 特殊服务
+  - DOMAIN-SUFFIX,chat.openai.com,🐾 特殊服务
+  - DOMAIN-SUFFIX,chatgpt.com,🐾 特殊服务
+
+  # 国内应用直连
+  - DOMAIN-SUFFIX,weixin.qq.com,DIRECT  # 微信
+  - DOMAIN-SUFFIX,wechat.com,DIRECT     # 微信
+  - DOMAIN-SUFFIX,qq.com,DIRECT         # QQ
+  - DOMAIN-SUFFIX,mail.qq.com,DIRECT    # QQ邮箱
+  - DOMAIN-SUFFIX,baidu.com,DIRECT      # 百度
+  - DOMAIN-SUFFIX,weibo.com,DIRECT      # 微博
+  - DOMAIN-SUFFIX,zhihu.com,DIRECT      # 知乎
+  - DOMAIN-SUFFIX,toutiao.com,DIRECT    # 今日头条
+  - DOMAIN-SUFFIX,ixigua.com,DIRECT     # 西瓜视频
+  - DOMAIN-SUFFIX,douyin.com,DIRECT     # 抖音
+  - DOMAIN-SUFFIX,aliyun.com,DIRECT     # 阿里云
+  - DOMAIN-SUFFIX,taobao.com,DIRECT     # 淘宝
+  - DOMAIN-SUFFIX,tmall.com,DIRECT      # 天猫
+  - DOMAIN-SUFFIX,jd.com,DIRECT         # 京东
+
+  # 广告屏蔽
+  - DOMAIN-SUFFIX,adservice.google.com,REJECT
+  - DOMAIN-SUFFIX,doubleclick.net,REJECT
+  - DOMAIN-SUFFIX,googlesyndication.com,REJECT
+  - DOMAIN-SUFFIX,google-analytics.com,REJECT
+
+  # 国内网站直连
+  - GEOIP,CN,DIRECT
+  - DOMAIN-SUFFIX,cn,DIRECT
+
+  # 默认规则
+  - MATCH,🚀 节点选择
+    `;
+
+    return new Response(clashConfig, {
+      headers: { 'Content-Type': 'application/x-yaml' },
+    })
+  } else {
+    return new Response('Not found', { status: 404 })
+  }
+}
